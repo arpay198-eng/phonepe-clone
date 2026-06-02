@@ -6,6 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -277,8 +279,7 @@ private fun MyQrDialog(onDismiss: () -> Unit) {
                     .size(200.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .background(White)
-                    .border(1.dp, Color.LightGray, RoundedCornerShape(12.dp))
-                    .align(Alignment.CenterHorizontally),
+                    .border(1.dp, Color.LightGray, RoundedCornerShape(12.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(Icons.Filled.QrCode2, contentDescription = null, modifier = Modifier.size(150.dp), tint = PurpleDark)

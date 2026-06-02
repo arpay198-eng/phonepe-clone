@@ -124,9 +124,15 @@ fun PaymentConfirmScreen(
                         BasicTextField(
                             value = note,
                             onValueChange = { if (it.length <= 50) note = it },
-                            placeholder = { Text("Add a note (optional)", color = Color.Gray) },
                             textStyle = TextStyle(fontSize = 13.sp, color = PurpleDark),
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
+                            cursorBrush = androidx.compose.ui.graphics.SolidColor(PurplePrimary),
+                            decorationBox = { innerTextField ->
+                                if (note.isEmpty()) {
+                                    Text("Add a note (optional)", color = Color.Gray, fontSize = 13.sp)
+                                }
+                                innerTextField()
+                            }
                         )
                     }
                 }

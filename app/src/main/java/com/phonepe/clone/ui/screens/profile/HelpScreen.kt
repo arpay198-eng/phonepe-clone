@@ -53,9 +53,9 @@ fun HelpScreen(navController: NavController) {
 
             // Quick actions
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                HelpCard("Chat with us", Icons.Filled.Chat, Color(0xFF00B8A9), Modifier.weight(1f)) {}
-                HelpCard("Call us", Icons.Filled.Phone, Color(0xFFFF6B35), Modifier.weight(1f)) {}
-                HelpCard("Email", Icons.Filled.Email, Color(0xFF2196F3), Modifier.weight(1f)) {}
+                HelpCard(title = "Chat with us", icon = Icons.Filled.Chat, color = Color(0xFF00B8A9), modifier = Modifier.weight(1f), onClick = {})
+                HelpCard(title = "Call us", icon = Icons.Filled.Phone, color = Color(0xFFFF6B35), modifier = Modifier.weight(1f), onClick = {})
+                HelpCard(title = "Email", icon = Icons.Filled.Email, color = Color(0xFF2196F3), modifier = Modifier.weight(1f), onClick = {})
             }
 
             Spacer(Modifier.height(20.dp))
