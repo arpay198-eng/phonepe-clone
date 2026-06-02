@@ -26,8 +26,6 @@ import com.phonepe.clone.ui.theme.*
 import com.phonepe.clone.viewmodel.AppViewModel
 import java.text.NumberFormat
 import java.util.Locale
-import java.text.NumberFormat
-import java.util.Locale
 
 @Composable
 fun WealthScreen(navController: NavController) {

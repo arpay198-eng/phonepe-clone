@@ -96,7 +96,7 @@ fun HelpScreen(navController: NavController) {
 }
 
 @Composable
-private fun HelpCard(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector, color: Color, modifier: Modifier) {
+private fun HelpCard(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector, color: Color, modifier: Modifier, onClick: () -> Unit = {}) {
     Surface(
         modifier = modifier.clickable { },
         shape = RoundedCornerShape(12.dp),
