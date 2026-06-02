@@ -1,0 +1,23 @@
+# GitHub pe push karne ke liye yeh commands run karo PowerShell me:
+
+# 1. Git install karo (https://git-scm.com/download/win) - ek baar
+
+# 2. Apna GitHub username aur email configure karo (ek baar):
+git config --global user.name "Tumhara Naam"
+git config --global user.email "tumhara@email.com"
+
+# 3. Project folder me jao aur initialize karo:
+cd E:\Phonepe
+git init
+git add .
+git commit -m "PhonePe-inspired clone app - Kotlin + Jetpack Compose"
+
+# 4. GitHub pe naya repository banao (https://github.com/new)
+#    Name: phonepe-clone, Public rakho
+
+# 5. Repository connect karo (apna username dalo):
+git branch -M main
+git remote add origin https://github.com/TUMHARA_USERNAME/phonepe-clone.git
+git push -u origin main
+
+# 6. GitHub repo me jaao -> Actions tab -> APK download karo
