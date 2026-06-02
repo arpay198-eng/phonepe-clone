@@ -66,7 +66,7 @@ fun PayToPhoneScreen(navController: NavController) {
                         Spacer(Modifier.width(12.dp))
                         BasicTextField(
                             value = phoneNumber,
-                            onValueChange = { if (it.length <= 10 && it.all { c -> c.isDigit() }) phoneNumber = it },
+                            onValueChange = { value -> if (value.length <= 10 && value.all { c -> c.isDigit() }) phoneNumber = value },
                             textStyle = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = PurpleDark),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                             singleLine = true,

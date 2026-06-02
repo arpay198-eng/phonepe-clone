@@ -187,7 +187,7 @@ private fun WealthAction(name: String, icon: androidx.compose.ui.graphics.vector
                     .clickable(onClick = onClick),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(icon, contentDescription = null, tint = PurplePrimary, modifier = Modifier.size(20.dp))
+                Icon(imageVector = icon, contentDescription = null, tint = PurplePrimary, modifier = Modifier.size(20.dp))
             }
             Spacer(Modifier.height(6.dp))
             Text(name, fontWeight = FontWeight.SemiBold, fontSize = 11.sp, color = Color.Black)

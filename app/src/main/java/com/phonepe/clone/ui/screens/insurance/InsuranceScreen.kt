@@ -81,7 +81,7 @@ fun InsuranceScreen(navController: NavController) {
                                 when (plan.type) {
                                     "Health Insurance" -> Icons.Filled.LocalHospital
                                     "Life Insurance" -> Icons.Filled.Favorite
-                                    "Bike Insurance" -> Icons.Filled.TwoWheeler
+                                    "Bike Insurance" -> Icons.Filled.DirectionsBike
                                     "Car Insurance" -> Icons.Filled.DirectionsCar
                                     else -> Icons.Filled.Flight
                                 },
@@ -153,7 +153,7 @@ private fun CategoryCard(name: String, icon: androidx.compose.ui.graphics.vector
                 modifier = Modifier.size(40.dp).clip(RoundedCornerShape(10.dp)).background(color),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(icon, contentDescription = null, tint = White, modifier = Modifier.size(20.dp))
+                Icon(imageVector = icon, contentDescription = null, tint = White, modifier = Modifier.size(20.dp))
             }
             Spacer(Modifier.height(6.dp))
             Text(name, fontWeight = FontWeight.SemiBold, fontSize = 12.sp, color = Color.Black)

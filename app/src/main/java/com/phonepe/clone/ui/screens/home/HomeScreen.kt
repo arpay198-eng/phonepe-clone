@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items as lazyItems
 import androidx.compose.foundation.rememberScrollState
@@ -360,7 +359,7 @@ private fun QuickActionButton(
             modifier = Modifier.padding(vertical = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(icon, contentDescription = null, tint = White, modifier = Modifier.size(24.dp))
+            Icon(imageVector = icon, contentDescription = null, tint = White, modifier = Modifier.size(24.dp))
             Spacer(Modifier.height(4.dp))
             Text(title, color = White, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
         }
@@ -512,8 +511,3 @@ private fun PromoBanner() {
 }
 
 data class Quadruple<A, B, C, D>(val a: A, val b: B, val c: C, val d: D)
-
-// LazyRow items helper
-private fun LazyListScope.items(count: Int, itemContent: @Composable (Int) -> Unit) {
-    androidx.compose.foundation.lazy.items(count = count, key = null) { itemContent(it) }
-}

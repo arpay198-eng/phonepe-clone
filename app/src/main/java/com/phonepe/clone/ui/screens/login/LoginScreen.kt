@@ -115,7 +115,7 @@ fun LoginScreen(navController: NavController) {
                         Spacer(Modifier.width(12.dp))
                         OutlinedTextField(
                             value = phoneNumber,
-                            onValueChange = { if (it.length <= 10 && it.all { c -> c.isDigit() }) phoneNumber = it },
+                            onValueChange = { value -> if (value.length <= 10 && value.all { c -> c.isDigit() }) phoneNumber = value },
                             placeholder = { Text("98765 43210", color = androidx.compose.ui.graphics.Color.Gray) },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                             singleLine = true,

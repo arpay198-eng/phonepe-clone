@@ -98,7 +98,7 @@ fun OtpScreen(navController: NavController, phone: String) {
             // Hidden text field for input
             BasicTextField(
                 value = otp,
-                onValueChange = { if (it.length <= 6 && it.all { c -> c.isDigit() }) otp = it },
+                onValueChange = { value -> if (value.length <= 6 && value.all { c -> c.isDigit() }) otp = value },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                 textStyle = TextStyle(color = androidx.compose.ui.graphics.Color.Transparent),
                 cursor = SolidColor(androidx.compose.ui.graphics.Color.Transparent),

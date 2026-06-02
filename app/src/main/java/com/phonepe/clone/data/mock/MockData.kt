@@ -132,7 +132,7 @@ object MockData {
         Service("1", "Mobile Recharge", "Prepaid/Postpaid", Icons.Filled.PhoneAndroid, Color(0xFF5F259F), route = "recharge"),
         Service("2", "Electricity", null, Icons.Filled.Bolt, Color(0xFFFF9800), route = "electricity"),
         Service("3", "Water Bill", null, Icons.Filled.WaterDrop, Color(0xFF2196F3), route = "water"),
-        Service("4", "Gas Cylinder", null, Icons.Filled.LocalGas, Color(0xFFE53935), route = "gas"),
+        Service("4", "Gas Cylinder", null, Icons.Filled.LocalFireDepartment, Color(0xFFE53935), route = "gas"),
         Service("5", "DTH", null, Icons.Filled.Tv, Color(0xFF00BCD4), route = "dth"),
         Service("6", "Broadband", null, Icons.Filled.Wifi, Color(0xFF9C27B0), route = "broadband"),
         Service("7", "Credit Card", null, Icons.Filled.CreditCard, Color(0xFFE91E63), route = "credit_card"),

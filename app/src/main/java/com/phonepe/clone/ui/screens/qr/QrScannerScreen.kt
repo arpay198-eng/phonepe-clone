@@ -255,7 +255,7 @@ private fun CircleActionButton(
                 .clickable(onClick = onClick),
             contentAlignment = Alignment.Center
         ) {
-            Icon(icon, contentDescription = label, tint = White, modifier = Modifier.size(24.dp))
+            Icon(imageVector = icon, contentDescription = label, tint = White, modifier = Modifier.size(24.dp))
         }
         Spacer(Modifier.height(4.dp))
         Text(label, color = White, fontSize = 11.sp)

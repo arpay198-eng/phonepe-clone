@@ -109,7 +109,7 @@ fun PaymentConfirmScreen(
                         Spacer(Modifier.width(8.dp))
                         BasicTextField(
                             value = amount,
-                            onValueChange = { if (it.length <= 7 && (it.isEmpty() || it.toDoubleOrNull() != null)) amount = it },
+                            onValueChange = { value -> if (value.length <= 7 && (value.isEmpty() || value.toDoubleOrNull() != null)) amount = value },
                             textStyle = TextStyle(fontSize = 36.sp, fontWeight = FontWeight.Bold, color = PurpleDark),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                             singleLine = true,
@@ -123,7 +123,7 @@ fun PaymentConfirmScreen(
                         Spacer(Modifier.width(8.dp))
                         BasicTextField(
                             value = note,
-                            onValueChange = { if (it.length <= 50) note = it },
+                            onValueChange = { value -> if (value.length <= 50) note = value },
                             textStyle = TextStyle(fontSize = 13.sp, color = PurpleDark),
                             modifier = Modifier.weight(1f),
                             cursorBrush = androidx.compose.ui.graphics.SolidColor(PurplePrimary),

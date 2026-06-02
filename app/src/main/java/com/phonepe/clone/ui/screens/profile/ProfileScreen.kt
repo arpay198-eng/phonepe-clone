@@ -163,7 +163,7 @@ private fun ProfileItem(title: String, subtitle: String, icon: ImageVector, onCl
             modifier = Modifier.size(36.dp).clip(RoundedCornerShape(8.dp)).background(PurplePrimary.copy(alpha = 0.1f)),
             contentAlignment = Alignment.Center
         ) {
-            Icon(icon, contentDescription = null, tint = PurplePrimary, modifier = Modifier.size(18.dp))
+            Icon(imageVector = icon, contentDescription = null, tint = PurplePrimary, modifier = Modifier.size(18.dp))
         }
         Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {

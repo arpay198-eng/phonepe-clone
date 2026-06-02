@@ -110,7 +110,7 @@ private fun HelpCard(title: String, icon: androidx.compose.ui.graphics.vector.Im
                 modifier = Modifier.size(40.dp).clip(RoundedCornerShape(8.dp)).background(color),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(icon, contentDescription = null, tint = White, modifier = Modifier.size(20.dp))
+                Icon(imageVector = icon, contentDescription = null, tint = White, modifier = Modifier.size(20.dp))
             }
             Spacer(Modifier.height(8.dp))
             Text(title, fontWeight = FontWeight.SemiBold, fontSize = 12.sp, color = Color.Black)

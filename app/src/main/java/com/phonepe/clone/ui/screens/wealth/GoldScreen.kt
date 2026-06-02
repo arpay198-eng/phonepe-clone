@@ -115,7 +115,7 @@ fun GoldScreen(navController: NavController) {
             )
             benefits.forEach { (text, icon) ->
                 Row(modifier = Modifier.padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(icon, contentDescription = null, tint = PurplePrimary, modifier = Modifier.size(20.dp))
+                    Icon(imageVector = icon, contentDescription = null, tint = PurplePrimary, modifier = Modifier.size(20.dp))
                     Spacer(Modifier.width(12.dp))
                     Text(text, fontSize = 13.sp, color = Color.Black)
                 }

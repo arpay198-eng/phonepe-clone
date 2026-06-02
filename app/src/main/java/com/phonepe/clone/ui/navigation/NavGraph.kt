@@ -14,7 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.phonepe.clone.ui.components.BottomNavBar
-import com.phonepe.clone.ui.screens.bank.BankAccountsScreen
+import com.phonepe.clone.ui.screens.profile.BankAccountsScreen
 import com.phonepe.clone.ui.screens.bank.BankLinkScreen
 import com.phonepe.clone.ui.screens.history.HistoryScreen
 import com.phonepe.clone.ui.screens.history.TransactionDetailScreen
