@@ -1,6 +1,7 @@
 package com.phonepe.clone.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -72,7 +73,9 @@ fun BottomNavBar(navController: NavHostController) {
                 if (isQrButton) {
                     Box(
                         modifier = Modifier
-                            .size(52.dp)
+                            .offset(y = (-12).dp)
+                            .size(56.dp)
+                            .border(3.dp, Color(0xFF0F0F11), CircleShape)
                             .clip(CircleShape)
                             .background(Color(0xFF5F259F))
                             .clickable {
@@ -90,7 +93,7 @@ fun BottomNavBar(navController: NavHostController) {
                             imageVector = item.icon,
                             contentDescription = item.title,
                             tint = Color.White,
-                            modifier = Modifier.size(26.dp)
+                            modifier = Modifier.size(28.dp)
                         )
                     }
                 } else {

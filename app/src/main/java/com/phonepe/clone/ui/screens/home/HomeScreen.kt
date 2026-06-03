@@ -32,6 +32,10 @@ import com.phonepe.clone.ui.navigation.Screen
 import com.phonepe.clone.ui.theme.*
 import com.phonepe.clone.viewmodel.AppViewModel
 import coil.compose.AsyncImage
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
+import com.phonepe.clone.R
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -66,11 +70,6 @@ fun HomeScreen(navController: NavController) {
             balanceAmount = banks.sumOf { it.balance }.toString()
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Mutual Funds & Gold Row Section
-        DailyInvestmentsSection(navController)
-
         Spacer(modifier = Modifier.height(20.dp))
 
         // Recharge & Bills Section
@@ -89,26 +88,29 @@ fun HeaderSection(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
             .background(
                 Brush.verticalGradient(
-                    colors = listOf(Color(0xFF1F0B46), Color(0xFF0F368A))
+                    colors = listOf(
+                        Color(0xFF32085A), // Rich deep purple
+                        Color(0xFF160533), // Dark violet
+                        Color(0xFF000000)  // Fades to black
+                    )
                 )
             )
-            .padding(bottom = 24.dp)
+            .padding(bottom = 16.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
-            // Top row: Avatar & Help
+            // Top row: Avatar & Help (?)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Profile Avatar with circular badge
+                // Profile Avatar with circular scan badge
                 Box(
                     modifier = Modifier.size(44.dp)
                 ) {
@@ -144,181 +146,101 @@ fun HeaderSection(
                     }
                 }
 
-                // Help Icon
-                IconButton(onClick = onHelpClick) {
-                    Icon(
-                        imageVector = Icons.Outlined.HelpOutline,
-                        contentDescription = "Help",
-                        tint = Color.White,
-                        modifier = Modifier.size(26.dp)
+                // Help Icon (?) - Outline circle with question mark
+                Box(
+                    modifier = Modifier
+                        .size(28.dp)
+                        .border(1.5.dp, Color.White, CircleShape)
+                        .clip(CircleShape)
+                        .clickable(onClick = onHelpClick),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "?",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-            // share.market promo
+            // Main promotion: Personal Loan with Apply button and phone illustration
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    // share.market text with green dot
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = "share",
-                            color = Color.White,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Normal
-                        )
-                        Box(
-                            modifier = Modifier
-                                .padding(horizontal = 2.dp)
-                                .size(5.dp)
-                                .clip(CircleShape)
-                                .background(Color(0xFF00E676))
-                        )
-                        Text(
-                            text = "market",
-                            color = Color.White,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+                // Left Column: Loan Text & Apply now Button
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = "Up to ₹10,00,000",
+                        color = Color.White,
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Black,
+                        lineHeight = 32.sp
+                    )
                     
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(2.dp))
 
                     Text(
-                        text = "Trade with 5x leverage",
-                        color = Color(0xFFAEEA00),
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Black
+                        text = "Personal Loan",
+                        color = Color(0xFFE1BEE7),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
                     )
-
-                    Spacer(modifier = Modifier.height(14.dp))
-
-                    // Balance & Buying power equation
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        // Balance
-                        Column(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(8.dp))
-                                .background(Color.Black.copy(alpha = 0.35f))
-                                .padding(horizontal = 12.dp, vertical = 6.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text("Balance", color = Color.White.copy(alpha = 0.7f), fontSize = 10.sp)
-                            Text("₹100", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                        }
-
-                        Text("=", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-
-                        // Buying power
-                        Column(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(8.dp))
-                                .background(Color.Black.copy(alpha = 0.35f))
-                                .padding(horizontal = 12.dp, vertical = 6.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text("Buying power", color = Color.White.copy(alpha = 0.7f), fontSize = 10.sp)
-                            Text("₹500", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                        }
-                    }
 
                     Spacer(modifier = Modifier.height(18.dp))
 
-                    // Start Now Button
-                    Surface(
-                        color = Color.Transparent,
-                        shape = RoundedCornerShape(20.dp),
-                        modifier = Modifier
-                            .border(1.dp, Color.White, RoundedCornerShape(20.dp))
-                            .clickable { }
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                "Start now",
-                                color = Color.White,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Icon(
-                                imageVector = Icons.Filled.ChevronRight,
-                                contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier.size(16.dp)
-                            )
-                        }
-                    }
-                }
-
-                // 3D rising arrows diagram
-                Box(
-                    modifier = Modifier
-                        .size(90.dp)
-                        .padding(bottom = 12.dp),
-                    contentAlignment = Alignment.BottomCenter
-                ) {
-                    // Isometric base platform
-                    Canvas(modifier = Modifier.fillMaxSize()) {
-                        val path = Path().apply {
-                            moveTo(size.width / 2, size.height - 5f)
-                            lineTo(size.width, size.height - 18f)
-                            lineTo(size.width / 2, size.height - 30f)
-                            lineTo(0f, size.height - 18f)
-                            close()
-                        }
-                        drawPath(path, Color(0xFF311B92).copy(alpha = 0.5f))
-                    }
-                    
-                    // Rising Arrows
+                    // Apply now button with neon glowing border
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        verticalAlignment = Alignment.Bottom,
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(Color(0xFF0F0F11))
+                            .border(1.5.dp, Color(0xFF00E676), RoundedCornerShape(20.dp))
+                            .clickable { /* Handle click */ }
+                            .padding(horizontal = 14.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        RisingArrow3D(color = Color(0xFF00BCD4), height = 36)
-                        RisingArrow3D(color = Color(0xFF4CAF50), height = 50)
-                        RisingArrow3D(color = Color(0xFF2196F3), height = 42)
+                        Text(
+                            text = "Apply now",
+                            color = Color.White,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Box(
+                            modifier = Modifier
+                                .size(18.dp)
+                                .clip(CircleShape)
+                                .background(Color.White),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowForward,
+                                contentDescription = null,
+                                tint = Color.Black,
+                                modifier = Modifier.size(12.dp)
+                            )
+                        }
                     }
                 }
-            }
-        }
-    }
-}
 
-@Composable
-fun RisingArrow3D(color: Color, height: Int) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.width(14.dp)
-    ) {
-        // Arrow Triangle Head
-        Canvas(modifier = Modifier.size(12.dp, 6.dp)) {
-            val path = Path().apply {
-                moveTo(size.width / 2, 0f)
-                lineTo(size.width, size.height)
-                lineTo(0f, size.height)
-                close()
+                Spacer(modifier = Modifier.width(8.dp))
+
+                // Right Image: Hand holding phone
+                Image(
+                    painter = painterResource(id = R.drawable.loan_promo_hand),
+                    contentDescription = "Hand holding phone illustration",
+                    modifier = Modifier
+                        .size(width = 135.dp, height = 150.dp)
+                        .align(Alignment.Bottom)
+                )
             }
-            drawPath(path, color)
         }
-        // Stem
-        Box(
-            modifier = Modifier
-                .width(6.dp)
-                .height((height - 6).dp)
-                .background(color)
-        )
     }
 }
 
@@ -490,6 +412,50 @@ fun CheckBalanceIcon() {
 }
 
 @Composable
+fun TuitionFeesDrawingMini() {
+    Canvas(modifier = Modifier.size(16.dp)) {
+        val w = size.width
+        val h = size.height
+        
+        // Left page
+        val leftPage = Path().apply {
+            moveTo(w * 0.1f, h * 0.2f)
+            quadraticBezierTo(w * 0.3f, h * 0.15f, w * 0.5f, h * 0.2f)
+            lineTo(w * 0.5f, h * 0.85f)
+            quadraticBezierTo(w * 0.3f, h * 0.8f, w * 0.1f, h * 0.85f)
+            close()
+        }
+        drawPath(leftPage, Color.White)
+        
+        // Right page
+        val rightPage = Path().apply {
+            moveTo(w * 0.5f, h * 0.2f)
+            quadraticBezierTo(w * 0.7f, h * 0.15f, w * 0.9f, h * 0.2f)
+            lineTo(w * 0.9f, h * 0.85f)
+            quadraticBezierTo(w * 0.7f, h * 0.8f, w * 0.5f, h * 0.85f)
+            close()
+        }
+        drawPath(rightPage, Color(0xFFF5F5F5))
+        
+        // Spine
+        drawLine(
+            color = Color.LightGray,
+            start = androidx.compose.ui.geometry.Offset(w * 0.5f, h * 0.2f),
+            end = androidx.compose.ui.geometry.Offset(w * 0.5f, h * 0.85f),
+            strokeWidth = 0.7.dp.toPx()
+        )
+        
+        // Pen
+        drawLine(
+            color = Color(0xFFD32F2F),
+            start = androidx.compose.ui.geometry.Offset(w * 0.7f, h * 0.3f),
+            end = androidx.compose.ui.geometry.Offset(w * 0.85f, h * 0.7f),
+            strokeWidth = 1.2.dp.toPx()
+        )
+    }
+}
+
+@Composable
 fun MoneyTransfersSection(
     navController: NavController,
     onCheckBalanceClick: () -> Unit,
@@ -580,6 +546,78 @@ fun MoneyTransfersSection(
                 onClick = onCheckBalanceClick
             ) {
                 CheckBalanceIcon()
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Two horizontal pill buttons below
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // 1. Tuition Fee: Use Credit Card
+            Row(
+                modifier = Modifier
+                    .weight(1.05f)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(Color(0xFF1D1D20))
+                    .border(1.dp, Color(0xFF2D2D30), RoundedCornerShape(10.dp))
+                    .clickable { }
+                    .padding(horizontal = 8.dp, vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier.size(24.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    TuitionFeesDrawingMini()
+                }
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = "Tuition Fee: Use Credit Card",
+                    color = Color.White,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            // 2. Daily Mutual
+            Row(
+                modifier = Modifier
+                    .weight(0.95f)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(Color(0xFF1D1D20))
+                    .border(1.dp, Color(0xFF2D2D30), RoundedCornerShape(10.dp))
+                    .clickable { navController.navigate(Screen.MutualFunds.route) }
+                    .padding(horizontal = 8.dp, vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(Color(0xFF1B5E20)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Money,
+                        contentDescription = null,
+                        tint = Color(0xFF00E676),
+                        modifier = Modifier.size(14.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = "Daily Mutual Fund",
+                    color = Color.White,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
     }
@@ -747,76 +785,45 @@ fun MobileRechargeDrawing() {
 
 @Composable
 fun TuitionFeesDrawing() {
-    Box(
-        modifier = Modifier.size(40.dp)
-    ) {
-        Canvas(modifier = Modifier.size(32.dp).align(Alignment.BottomCenter)) {
-            val w = size.width
-            val h = size.height
-            
-            // Left page
-            val leftPage = Path().apply {
-                moveTo(w * 0.1f, h * 0.2f)
-                quadraticBezierTo(w * 0.3f, h * 0.15f, w * 0.5f, h * 0.2f)
-                lineTo(w * 0.5f, h * 0.85f)
-                quadraticBezierTo(w * 0.3f, h * 0.8f, w * 0.1f, h * 0.85f)
-                close()
-            }
-            drawPath(leftPage, Color.White)
-            
-            // Right page
-            val rightPage = Path().apply {
-                moveTo(w * 0.5f, h * 0.2f)
-                quadraticBezierTo(w * 0.7f, h * 0.15f, w * 0.9f, h * 0.2f)
-                lineTo(w * 0.9f, h * 0.85f)
-                quadraticBezierTo(w * 0.7f, h * 0.8f, w * 0.5f, h * 0.85f)
-                close()
-            }
-            drawPath(rightPage, Color(0xFFF5F5F5))
-            
-            // Spine
-            drawLine(
-                color = Color.LightGray,
-                start = androidx.compose.ui.geometry.Offset(w * 0.5f, h * 0.2f),
-                end = androidx.compose.ui.geometry.Offset(w * 0.5f, h * 0.85f),
-                strokeWidth = 1.dp.toPx()
-            )
-            
-            // Pen
-            drawLine(
-                color = Color(0xFFD32F2F),
-                start = androidx.compose.ui.geometry.Offset(w * 0.7f, h * 0.3f),
-                end = androidx.compose.ui.geometry.Offset(w * 0.85f, h * 0.7f),
-                strokeWidth = 2.dp.toPx()
-            )
-        }
+    Canvas(modifier = Modifier.size(32.dp)) {
+        val w = size.width
+        val h = size.height
         
-        Row(
-            modifier = Modifier
-                .offset(x = 0.dp, y = (-2).dp)
-                .clip(RoundedCornerShape(3.dp))
-                .background(Color(0xFFC2185B))
-                .padding(horizontal = 4.dp, vertical = 2.dp)
-                .align(Alignment.TopStart),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(2.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(8.dp)
-                    .clip(CircleShape)
-                    .background(Color(0xFF00E676)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("%", color = Color.White, fontSize = 5.sp, fontWeight = FontWeight.Bold)
-            }
-            Text(
-                "2.3%fe...",
-                color = Color.White,
-                fontSize = 7.sp,
-                fontWeight = FontWeight.Black
-            )
+        // Left page
+        val leftPage = Path().apply {
+            moveTo(w * 0.1f, h * 0.2f)
+            quadraticBezierTo(w * 0.3f, h * 0.15f, w * 0.5f, h * 0.2f)
+            lineTo(w * 0.5f, h * 0.85f)
+            quadraticBezierTo(w * 0.3f, h * 0.8f, w * 0.1f, h * 0.85f)
+            close()
         }
+        drawPath(leftPage, Color.White)
+        
+        // Right page
+        val rightPage = Path().apply {
+            moveTo(w * 0.5f, h * 0.2f)
+            quadraticBezierTo(w * 0.7f, h * 0.15f, w * 0.9f, h * 0.2f)
+            lineTo(w * 0.9f, h * 0.85f)
+            quadraticBezierTo(w * 0.7f, h * 0.8f, w * 0.5f, h * 0.85f)
+            close()
+        }
+        drawPath(rightPage, Color(0xFFF5F5F5))
+        
+        // Spine
+        drawLine(
+            color = Color.LightGray,
+            start = androidx.compose.ui.geometry.Offset(w * 0.5f, h * 0.2f),
+            end = androidx.compose.ui.geometry.Offset(w * 0.5f, h * 0.85f),
+            strokeWidth = 1.dp.toPx()
+        )
+        
+        // Pen
+        drawLine(
+            color = Color(0xFFD32F2F),
+            start = androidx.compose.ui.geometry.Offset(w * 0.7f, h * 0.3f),
+            end = androidx.compose.ui.geometry.Offset(w * 0.85f, h * 0.7f),
+            strokeWidth = 2.dp.toPx()
+        )
     }
 }
 
@@ -958,7 +965,35 @@ fun RechargeAndBillsSection(navController: NavController) {
             // 2. Tuition Fees
             RechargeSquareButton(
                 title = "Tuition\nFees",
-                onClick = { }
+                onClick = { },
+                badge = {
+                    Row(
+                        modifier = Modifier
+                            .offset(x = (-4).dp, y = (-4).dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(Color(0xFFC2185B))
+                            .padding(horizontal = 4.dp, vertical = 2.dp)
+                            .align(Alignment.TopStart),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(2.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(8.dp)
+                                .clip(CircleShape)
+                                .background(Color(0xFF00E676)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("%", color = Color.White, fontSize = 5.sp, fontWeight = FontWeight.Bold)
+                        }
+                        Text(
+                            "2.3%fe...",
+                            color = Color.White,
+                            fontSize = 7.sp,
+                            fontWeight = FontWeight.Black
+                        )
+                    }
+                }
             ) {
                 TuitionFeesDrawing()
             }
@@ -1062,6 +1097,7 @@ fun RechargeAndBillsSection(navController: NavController) {
 fun RowScope.RechargeSquareButton(
     title: String,
     onClick: () -> Unit,
+    badge: @Composable (BoxScope.() -> Unit)? = null,
     icon: @Composable () -> Unit
 ) {
     Column(
@@ -1074,11 +1110,22 @@ fun RowScope.RechargeSquareButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(76.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(Color(0xFF151517)),
-            contentAlignment = Alignment.Center
         ) {
-            icon()
+            // Main Button Container
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color(0xFF151517)),
+                contentAlignment = Alignment.Center
+            ) {
+                icon()
+            }
+            
+            // Overlapping Badge
+            if (badge != null) {
+                badge()
+            }
         }
         Spacer(modifier = Modifier.height(8.dp))
         Text(

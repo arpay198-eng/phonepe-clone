@@ -2,9 +2,9 @@ name: Build Android APK
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, warp-halo-docks-22h45 ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, master, warp-halo-docks-22h45 ]
   workflow_dispatch:
 
 jobs:
