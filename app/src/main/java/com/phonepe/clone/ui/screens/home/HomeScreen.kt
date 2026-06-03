@@ -779,7 +779,7 @@ fun TuitionFeesDrawing() {
                 color = Color.LightGray,
                 start = androidx.compose.ui.geometry.Offset(w * 0.5f, h * 0.2f),
                 end = androidx.compose.ui.geometry.Offset(w * 0.5f, h * 0.85f),
-                width = 1.dp.toPx()
+                strokeWidth = 1.dp.toPx()
             )
             
             // Pen
@@ -787,7 +787,7 @@ fun TuitionFeesDrawing() {
                 color = Color(0xFFD32F2F),
                 start = androidx.compose.ui.geometry.Offset(w * 0.7f, h * 0.3f),
                 end = androidx.compose.ui.geometry.Offset(w * 0.85f, h * 0.7f),
-                width = 2.dp.toPx()
+                strokeWidth = 2.dp.toPx()
             )
         }
         
@@ -891,7 +891,7 @@ fun LoanRepaymentDrawing() {
                 color = Color(0xFFFFB300),
                 start = androidx.compose.ui.geometry.Offset(w * 0.33f, h * 0.32f),
                 end = androidx.compose.ui.geometry.Offset(w * 0.67f, h * 0.32f),
-                width = 2.dp.toPx()
+                strokeWidth = 2.dp.toPx()
             )
         }
         
