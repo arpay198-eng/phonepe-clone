@@ -21,6 +21,8 @@ sealed class Screen(val route: String) {
     object History : Screen("history")
 
     // Detail screens
+    object Search : Screen("search")
+    object Alerts : Screen("alerts")
     object Profile : Screen("profile")
     object QrScanner : Screen("qr_scanner")
     object PayContact : Screen("pay_contact")

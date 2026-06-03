@@ -3,6 +3,10 @@ package com.phonepe.clone.ui.navigation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.FontWeight
+import com.phonepe.clone.ui.theme.TextSecondary
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -52,10 +56,12 @@ fun NavGraph(navController: NavHostController) {
 
     val showBottomBar = currentRoute in listOf(
         Screen.Home.route,
+        Screen.Search.route,
+        Screen.Alerts.route,
+        Screen.History.route,
         Screen.Stores.route,
         Screen.InsuranceTab.route,
-        Screen.Wealth.route,
-        Screen.History.route
+        Screen.Wealth.route
     )
 
     Scaffold(
@@ -84,6 +90,8 @@ fun NavGraph(navController: NavHostController) {
                 composable(Screen.BankLink.route) { BankLinkScreen(navController) }
                 composable(Screen.PinSetup.route) { PinSetupScreen(navController) }
 
+                composable(Screen.Search.route) { SearchPlaceholder(navController) }
+                composable(Screen.Alerts.route) { AlertsPlaceholder(navController) }
                 composable(Screen.Home.route) { HomeScreen(navController) }
                 composable(Screen.Stores.route) { StoresScreen(navController) }
                 composable(Screen.InsuranceTab.route) { InsuranceScreen(navController) }
@@ -133,5 +141,25 @@ fun NavGraph(navController: NavHostController) {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun SearchPlaceholder(navController: NavHostController) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = androidx.compose.ui.Alignment.Center
+    ) {
+        Text("Search", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = TextSecondary)
+    }
+}
+
+@Composable
+fun AlertsPlaceholder(navController: NavHostController) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = androidx.compose.ui.Alignment.Center
+    ) {
+        Text("Alerts", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = TextSecondary)
     }
 }

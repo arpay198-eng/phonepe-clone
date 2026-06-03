@@ -18,8 +18,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            PhonePeCloneTheme {
-                Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
+            PhonePeCloneTheme(darkTheme = true) {
+                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     AppNavigation()
                 }
             }

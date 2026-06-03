@@ -1,17 +1,17 @@
 package com.phonepe.clone.ui.screens.home
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items as lazyItems
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,285 +19,277 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.phonepe.clone.data.model.Service
 import com.phonepe.clone.ui.components.CircularAvatar
-import com.phonepe.clone.ui.components.QuickActionCard
-import com.phonepe.clone.ui.components.ServiceGridItem
 import com.phonepe.clone.ui.navigation.Screen
 import com.phonepe.clone.ui.theme.*
 import com.phonepe.clone.viewmodel.AppViewModel
-import java.text.NumberFormat
-import java.util.Locale
+import io.coil.compose.AsyncImage
 
 @Composable
 fun HomeScreen(navController: NavController) {
     val viewModel: AppViewModel = viewModel()
     val user by viewModel.user.collectAsState()
     val banks by viewModel.banks.collectAsState()
-    val quickActions by viewModel.quickActions.collectAsState()
-    val allServices by viewModel.allServices.collectAsState()
-    val offers by viewModel.offers.collectAsState()
-
+    
     var showBalance by remember { mutableStateOf(false) }
-    val totalBalance = banks.sumOf { it.balance }
-    val formattedBalance = NumberFormat.getNumberInstance(Locale("en", "IN")).format(totalBalance)
 
-    Box(modifier = Modifier.fillMaxSize().background(Color(0xFFF5F0FA))) {
-        // Purple header background
-        Box(
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+            .verticalScroll(rememberScrollState())
+    ) {
+        // Status bar space (we use edge-to-edge, so status bars padding is handled by NavHost Scaffold)
+        
+        // Curved Top Header with share.market Promo
+        HeaderSection(
+            userName = user.name,
+            onProfileClick = { navController.navigate(Screen.Profile.route) },
+            onHelpClick = { navController.navigate(Screen.Help.route) }
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Money Transfers Card Section
+        MoneyTransfersSection(
+            navController = navController,
+            onCheckBalanceClick = { showBalance = !showBalance },
+            showBalance = showBalance,
+            balanceAmount = banks.sumOf { it.balance }.toString()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Mutual Funds & Gold Row Section
+        DailyInvestmentsSection(navController)
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Recharge & Bills Section
+        RechargeAndBillsSection(navController)
+
+        Spacer(modifier = Modifier.height(40.dp)) // Extra bottom padding for navigation bar overlap
+    }
+}
+
+@Composable
+fun HeaderSection(
+    userName: String,
+    onProfileClick: () -> Unit,
+    onHelpClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(Color(0xFF1F0B46), Color(0xFF0F368A))
+                )
+            )
+            .padding(bottom = 24.dp)
+    ) {
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(220.dp)
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(PurplePrimary, PurpleDark)
-                    )
-                )
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
+                .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
-            // Top bar
-            HomeTopBar(
-                userName = user.name,
-                onProfileClick = { navController.navigate(Screen.Profile.route) }
-            )
-
-            // Balance card
-            BalanceCard(
-                balance = formattedBalance,
-                bankName = banks.first().bankName,
-                upiId = user.upiId,
-                showBalance = showBalance,
-                onToggleBalance = { showBalance = !showBalance }
-            )
-
-            Spacer(Modifier.height(8.dp))
-
-            // Quick action row
-            QuickActionRow(
-                onQrClick = { navController.navigate(Screen.QrScanner.route) },
-                onPayClick = { navController.navigate(Screen.PayContact.route) },
-                onBankClick = { navController.navigate(Screen.BankTransfer.route) }
-            )
-
-            // Scrollable content
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+            // Top row: Avatar & Help
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Spacer(Modifier.height(12.dp))
-
-                // Money transfers section
-                SectionHeader(title = "Money Transfers", onSeeAll = {})
-                LazyRow(
-                    contentPadding = PaddingValues(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                // Profile Avatar with circular badge
+                Box(
+                    modifier = Modifier.size(44.dp)
                 ) {
-                    items(4) { index ->
-                        when (index) {
-                            0 -> QuickActionCard(
-                                title = "To Mobile\nNumber",
-                                icon = Icons.Filled.Phone,
-                                backgroundColor = PurplePrimary,
-                                onClick = { navController.navigate(Screen.PayToPhone.route) }
-                            )
-                            1 -> QuickActionCard(
-                                title = "To Bank/\nUPI ID",
-                                icon = Icons.Filled.AccountBalance,
-                                backgroundColor = Color(0xFF00B8A9),
-                                onClick = { navController.navigate(Screen.BankTransfer.route) }
-                            )
-                            2 -> QuickActionCard(
-                                title = "Self\nTransfer",
-                                icon = Icons.Filled.SwapHoriz,
-                                backgroundColor = Color(0xFFFF6B35),
-                                onClick = {}
-                            )
-                            3 -> QuickActionCard(
-                                title = "Check\nBalance",
-                                icon = Icons.Filled.AccountBalanceWallet,
-                                backgroundColor = Color(0xFF2196F3),
-                                onClick = {}
-                            )
-                        }
+                    Box(
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(CircleShape)
+                            .background(Color.White.copy(alpha = 0.2f))
+                            .clickable(onClick = onProfileClick)
+                    ) {
+                        AsyncImage(
+                            model = "https://i.pravatar.cc/150?img=33",
+                            contentDescription = "Profile Picture",
+                            modifier = Modifier.fillMaxSize()
+                        )
                     }
-                }
-
-                Spacer(Modifier.height(20.dp))
-
-                // Recharge & Bills
-                SectionHeader(title = "Recharge & Bills", onSeeAll = { navController.navigate(Screen.MobileRecharge.route) })
-                LazyRow(
-                    contentPadding = PaddingValues(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    items(4) { index ->
-                        val (title, icon, color, route) = when (index) {
-                            0 -> Quadruple("Mobile\nRecharge", Icons.Filled.PhoneAndroid, PurplePrimary, Screen.MobileRecharge.route)
-                            1 -> Quadruple("Electricity", Icons.Filled.Bolt, Color(0xFFFF9800), Screen.ElectricityBill.route)
-                            2 -> Quadruple("DTH", Icons.Filled.Tv, Color(0xFF2196F3), Screen.DthRecharge.route)
-                            else -> Quadruple("Credit\nCard", Icons.Filled.CreditCard, Color(0xFFE91E63), Screen.MobileRecharge.route)
-                        }
-                        QuickActionCard(
-                            title = title,
-                            icon = icon,
-                            backgroundColor = color,
-                            onClick = { navController.navigate(route) }
+                    // Small QrCode scanner badge on bottom right
+                    Box(
+                        modifier = Modifier
+                            .size(16.dp)
+                            .align(Alignment.BottomEnd)
+                            .clip(CircleShape)
+                            .background(Color.Black)
+                            .border(1.dp, Color.White.copy(alpha = 0.5f), CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.QrCodeScanner,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(9.dp)
                         )
                     }
                 }
 
-                Spacer(Modifier.height(24.dp))
-
-                // All services grid
-                ServicesGrid(
-                    services = allServices.take(12),
-                    onServiceClick = { service ->
-                        when (service.route) {
-                            "recharge" -> navController.navigate(Screen.MobileRecharge.route)
-                            "electricity" -> navController.navigate(Screen.ElectricityBill.route)
-                            "dth" -> navController.navigate(Screen.DthRecharge.route)
-                            "insurance" -> navController.navigate(Screen.Insurance.route)
-                            "wealth", "mutual_funds" -> navController.navigate(Screen.MutualFunds.route)
-                            "gold" -> navController.navigate(Screen.Gold.route)
-                            else -> { }
-                        }
-                    }
-                )
-
-                Spacer(Modifier.height(20.dp))
-
-                // Offers carousel
-                SectionHeader(title = "Offers for you", onSeeAll = {})
-                LazyRow(
-                    contentPadding = PaddingValues(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    lazyItems(offers.take(5)) { offer ->
-                        OfferCard(
-                            title = offer.title,
-                            subtitle = offer.subtitle,
-                            store = offer.store,
-                            cashback = offer.cashback,
-                            color = offer.color
-                        )
-                    }
+                // Help Icon
+                IconButton(onClick = onHelpClick) {
+                    Icon(
+                        imageVector = Icons.Outlined.HelpOutline,
+                        contentDescription = "Help",
+                        tint = Color.White,
+                        modifier = Modifier.size(26.dp)
+                    )
                 }
-
-                Spacer(Modifier.height(20.dp))
-
-                // Promotional banner
-                PromoBanner()
-                Spacer(Modifier.height(24.dp))
             }
-        }
-    }
-}
 
-@Composable
-private fun HomeTopBar(userName: String, onProfileClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        CircularAvatar(
-            name = userName,
-            size = 38,
-            backgroundColor = White,
-            textColor = PurplePrimary,
-            onClick = onProfileClick
-        )
-        Spacer(Modifier.width(12.dp))
-        Column(modifier = Modifier.weight(1f)) {
-            Text("Hi, $userName", color = White, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
-            Text(userName.split(" ").first() + " 👋", color = White.copy(alpha = 0.85f), fontSize = 12.sp)
-        }
-        IconButton(onClick = {}) {
-            Icon(Icons.Filled.Notifications, contentDescription = "Notifications", tint = White)
-        }
-        IconButton(onClick = {}) {
-            Icon(Icons.Filled.Search, contentDescription = "Search", tint = White)
-        }
-    }
-}
+            Spacer(modifier = Modifier.height(10.dp))
 
-@Composable
-private fun BalanceCard(
-    balance: String,
-    bankName: String,
-    upiId: String,
-    showBalance: Boolean,
-    onToggleBalance: () -> Unit
-) {
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        shape = RoundedCornerShape(16.dp),
-        color = White,
-        shadowElevation = 4.dp
-    ) {
-        Column(modifier = Modifier.padding(20.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            // share.market promo
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    // share.market text with green dot
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "share",
+                            color = Color.White,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Normal
+                        )
+                        Box(
+                            modifier = Modifier
+                                .padding(horizontal = 2.dp)
+                                .size(5.dp)
+                                .clip(CircleShape)
+                                .background(Color(0xFF00E676))
+                        )
+                        Text(
+                            text = "market",
+                            color = Color.White,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    
+                    Spacer(modifier = Modifier.height(6.dp))
+
+                    Text(
+                        text = "Trade with 5x leverage",
+                        color = Color(0xFFAEEA00),
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Black
+                    )
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    // Balance & Buying power equation
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        // Balance
+                        Column(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(Color.Black.copy(alpha = 0.35f))
+                                .padding(horizontal = 12.dp, vertical = 6.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text("Balance", color = Color.White.copy(alpha = 0.7f), fontSize = 10.sp)
+                            Text("₹100", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                        }
+
+                        Text("=", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+
+                        // Buying power
+                        Column(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(Color.Black.copy(alpha = 0.35f))
+                                .padding(horizontal = 12.dp, vertical = 6.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text("Buying power", color = Color.White.copy(alpha = 0.7f), fontSize = 10.sp)
+                            Text("₹500", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(18.dp))
+
+                    // Start Now Button
+                    Surface(
+                        color = Color.Transparent,
+                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier
+                            .border(1.dp, Color.White, RoundedCornerShape(20.dp))
+                            .clickable { }
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                "Start now",
+                                color = Color.White,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Icon(
+                                imageVector = Icons.Filled.ChevronRight,
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    }
+                }
+
+                // 3D rising arrows diagram
                 Box(
                     modifier = Modifier
-                        .size(40.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(PurplePrimary),
-                    contentAlignment = Alignment.Center
+                        .size(90.dp)
+                        .padding(bottom = 12.dp),
+                    contentAlignment = Alignment.BottomCenter
                 ) {
-                    Text("₹", color = White, fontSize = 20.sp, fontWeight = FontWeight.Black)
-                }
-                Spacer(Modifier.width(12.dp))
-                Column(modifier = Modifier.weight(1f)) {
-                    Text("UPI Linked", color = Color.Gray, fontSize = 11.sp)
-                    Text(upiId, color = PurpleDark, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-                }
-                IconButton(onClick = onToggleBalance) {
-                    Icon(
-                        if (showBalance) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
-                        contentDescription = null,
-                        tint = PurplePrimary
-                    )
-                }
-            }
-            Divider(modifier = Modifier.padding(vertical = 12.dp), color = Color.LightGray.copy(alpha = 0.3f))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text("Total Balance", color = Color.Gray, fontSize = 12.sp)
-                    Spacer(Modifier.height(2.dp))
-                    Text(
-                        text = if (showBalance) "₹$balance" else "₹ • • • • •",
-                        color = PurpleDark,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text("$bankName • Primary", color = Color.Gray, fontSize = 11.sp)
-                }
-                Surface(
-                    color = PurplePrimary.copy(alpha = 0.1f),
-                    shape = RoundedCornerShape(20.dp)
-                ) {
-                    Text(
-                        "View All",
-                        color = PurplePrimary,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                    )
+                    // Isometric base platform
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+                        val path = Path().apply {
+                            moveTo(size.width / 2, size.height - 5f)
+                            lineTo(size.width, size.height - 18f)
+                            lineTo(size.width / 2, size.height - 30f)
+                            lineTo(0f, size.height - 18f)
+                            close()
+                        }
+                        drawPath(path, Color(0xFF311B92).copy(alpha = 0.5f))
+                    }
+                    
+                    // Rising Arrows
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalAlignment = Alignment.Bottom,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    ) {
+                        RisingArrow3D(color = Color(0xFF00BCD4), height = 36)
+                        RisingArrow3D(color = Color(0xFF4CAF50), height = 50)
+                        RisingArrow3D(color = Color(0xFF2196F3), height = 42)
+                    }
                 }
             }
         }
@@ -305,209 +297,521 @@ private fun BalanceCard(
 }
 
 @Composable
-private fun QuickActionRow(
-    onQrClick: () -> Unit,
-    onPayClick: () -> Unit,
-    onBankClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+fun RisingArrow3D(color: Color, height: Int) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.width(14.dp)
     ) {
-        QuickActionButton(
-            modifier = Modifier.weight(1f),
-            title = "Scan QR",
-            icon = Icons.Filled.QrCodeScanner,
-            backgroundColor = PurplePrimary,
-            onClick = onQrClick
-        )
-        QuickActionButton(
-            modifier = Modifier.weight(1f),
-            title = "Pay",
-            icon = Icons.Filled.Send,
-            backgroundColor = Color(0xFF00B8A9),
-            onClick = onPayClick
-        )
-        QuickActionButton(
-            modifier = Modifier.weight(1f),
-            title = "To Bank",
-            icon = Icons.Filled.AccountBalance,
-            backgroundColor = Color(0xFFFF6B35),
-            onClick = onBankClick
-        )
-    }
-}
-
-@Composable
-private fun QuickActionButton(
-    title: String,
-    icon: ImageVector,
-    backgroundColor: Color,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Surface(
-        modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .clickable(onClick = onClick),
-        color = backgroundColor,
-        shadowElevation = 2.dp
-    ) {
-        Column(
-            modifier = Modifier.padding(vertical = 12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(imageVector = icon, contentDescription = null, tint = White, modifier = Modifier.size(24.dp))
-            Spacer(Modifier.height(4.dp))
-            Text(title, color = White, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+        // Arrow Triangle Head
+        Canvas(modifier = Modifier.size(12.dp, 6.dp)) {
+            val path = Path().apply {
+                moveTo(size.width / 2, 0f)
+                lineTo(size.width, size.height)
+                lineTo(0f, size.height)
+                close()
+            }
+            drawPath(path, color)
         }
-    }
-}
-
-@Composable
-private fun SectionHeader(title: String, onSeeAll: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = title,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
-            color = PurpleDark,
-            modifier = Modifier.weight(1f)
+        // Stem
+        Box(
+            modifier = Modifier
+                .width(6.dp)
+                .height((height - 6).dp)
+                .background(color)
         )
-        TextButton(onClick = onSeeAll) {
-            Text("See All", color = PurplePrimary, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
-        }
     }
 }
 
 @Composable
-private fun ServicesGrid(
-    services: List<Service>,
-    onServiceClick: (Service) -> Unit
+fun MoneyTransfersSection(
+    navController: NavController,
+    onCheckBalanceClick: () -> Unit,
+    showBalance: Boolean,
+    balanceAmount: String
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(White)
-            .padding(vertical = 12.dp)
+            .background(Color(0xFF151517))
+            .padding(16.dp)
     ) {
+        // Header
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            services.take(4).forEach { service ->
-                ServiceGridItem(
-                    service = service,
-                    onClick = { onServiceClick(service) },
-                    modifier = Modifier.weight(1f)
+            Text(
+                "Money Transfers",
+                color = Color.White,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            // Refer badge pill
+            Row(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color(0xFFE65100))
+                    .padding(horizontal = 10.dp, vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.LocalOffer,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(12.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "Refer \u2192 \u20B9200",
+                    color = Color.White,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
-        Spacer(Modifier.height(12.dp))
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Icons Row
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            services.drop(4).take(4).forEach { service ->
-                ServiceGridItem(
-                    service = service,
-                    onClick = { onServiceClick(service) },
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-        Spacer(Modifier.height(12.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            services.drop(8).take(4).forEach { service ->
-                ServiceGridItem(
-                    service = service,
-                    onClick = { onServiceClick(service) },
-                    modifier = Modifier.weight(1f)
-                )
-            }
+            // 1. To Mobile Number
+            MoneyTransferAction(
+                title = "To Mobile\nNumber",
+                icon = Icons.Filled.SendToMobile,
+                hasGreenDot = true,
+                onClick = { navController.navigate(Screen.PayToPhone.route) }
+            )
+
+            // 2. To Bank & Self
+            MoneyTransferAction(
+                title = "To Bank &\nSelf A/c",
+                icon = Icons.Filled.AccountBalance,
+                onClick = { navController.navigate(Screen.BankTransfer.route) }
+            )
+
+            // 3. PhonePe Wallet
+            MoneyTransferAction(
+                title = "PhonePe\nWallet",
+                icon = Icons.Filled.Wallet,
+                onClick = { }
+            )
+
+            // 4. Check Balance
+            CheckBalanceAction(
+                showBalance = showBalance,
+                balanceAmount = balanceAmount,
+                onClick = onCheckBalanceClick
+            )
         }
     }
 }
 
 @Composable
-private fun OfferCard(
+fun MoneyTransferAction(
     title: String,
-    subtitle: String,
-    store: String,
-    cashback: String,
-    color: Color
+    icon: ImageVector,
+    hasGreenDot: Boolean = false,
+    onClick: () -> Unit
 ) {
-    Surface(
+    Column(
         modifier = Modifier
-            .width(220.dp)
-            .clip(RoundedCornerShape(12.dp)),
-        color = White,
-        shadowElevation = 2.dp
+            .width(72.dp)
+            .clickable(onClick = onClick),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column {
+        Box(
+            modifier = Modifier
+                .size(56.dp)
+                .clip(CircleShape)
+                .background(Color(0xFF5F259F))
+                .padding(14.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = title,
+                tint = Color.White,
+                modifier = Modifier.size(28.dp)
+            )
+            if (hasGreenDot) {
+                Box(
+                    modifier = Modifier
+                        .size(10.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFF00C853))
+                        .align(Alignment.TopEnd)
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = title,
+            color = Color.White,
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Medium,
+            textAlign = TextAlign.Center,
+            lineHeight = 14.sp
+        )
+    }
+}
+
+@Composable
+fun CheckBalanceAction(
+    showBalance: Boolean,
+    balanceAmount: String,
+    onClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .width(72.dp)
+            .clickable(onClick = onClick),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .size(56.dp)
+                .clip(CircleShape)
+                .background(Color(0xFF5F259F)),
+            contentAlignment = Alignment.Center
+        ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(70.dp)
-                    .background(color),
-                contentAlignment = Alignment.CenterStart
+                    .size(44.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xFF7B3FCB)),
+                contentAlignment = Alignment.Center
             ) {
-                Column(modifier = Modifier.padding(12.dp)) {
-                    Text(store, color = White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                    Text("Cashback $cashback", color = White.copy(alpha = 0.9f), fontSize = 11.sp)
-                }
+                Text(
+                    text = if (showBalance) "₹" else "₹",
+                    color = Color.White,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Black
+                )
             }
-            Column(modifier = Modifier.padding(12.dp)) {
-                Text(title, color = PurpleDark, fontWeight = FontWeight.SemiBold, fontSize = 13.sp, maxLines = 1)
-                Spacer(Modifier.height(2.dp))
-                Text(subtitle, color = Color.Gray, fontSize = 11.sp, maxLines = 1)
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = if (showBalance) "₹$balanceAmount" else "Check\nBalance",
+            color = Color.White,
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Medium,
+            textAlign = TextAlign.Center,
+            lineHeight = 14.sp
+        )
+    }
+}
+
+@Composable
+fun DailyInvestmentsSection(navController: NavController) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        // Daily Mutual Fund SIP
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .clip(RoundedCornerShape(12.dp))
+                .background(Color(0xFF151517))
+                .clickable { navController.navigate(Screen.MutualFunds.route) }
+                .padding(horizontal = 12.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Green cash bills drawing
+            Box(
+                modifier = Modifier
+                    .size(34.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(Color(0xFF1B5E20)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Money,
+                    contentDescription = null,
+                    tint = Color(0xFF00E676),
+                    modifier = Modifier.size(22.dp)
+                )
             }
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = "Daily Mutual Fund SIP @ \u20B910",
+                color = Color.White,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                lineHeight = 14.sp
+            )
+        }
+
+        // Daily Gold saving
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .clip(RoundedCornerShape(12.dp))
+                .background(Color(0xFF151517))
+                .clickable { navController.navigate(Screen.Gold.route) }
+                .padding(horizontal = 12.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Gold coin drawing
+            Box(
+                modifier = Modifier
+                    .size(34.dp)
+                    .clip(CircleShape)
+                    .background(
+                        Brush.radialGradient(
+                            colors = listOf(Color(0xFFFFD54F), Color(0xFFFFB300))
+                        )
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "24k",
+                    color = Color.Black,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Black
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = "Daily Gold saving in Wallet",
+                color = Color.White,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                lineHeight = 14.sp
+            )
         }
     }
 }
 
 @Composable
-private fun PromoBanner() {
-    Surface(
+fun RechargeAndBillsSection(navController: NavController) {
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(16.dp)),
-        color = Color(0xFFFFE0B2)
     ) {
+        // Header
+        Text(
+            "Recharge & Bills",
+            color = Color.White,
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(14.dp))
+
+        // Grid row (4 squares)
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // 1. Mobile Recharge
+            RechargeSquareButton(
+                title = "Mobile\nRecharge",
+                onClick = { navController.navigate(Screen.MobileRecharge.route) }
+            ) {
+                Box(modifier = Modifier.size(36.dp), contentAlignment = Alignment.Center) {
+                    Box(
+                        modifier = Modifier
+                            .size(width = 16.dp, height = 28.dp)
+                            .clip(RoundedCornerShape(3.dp))
+                            .background(Color(0xFF1E88E5))
+                    )
+                    Icon(
+                        imageVector = Icons.Filled.FlashOn,
+                        contentDescription = null,
+                        tint = Color(0xFFFFB300),
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+            }
+
+            // 2. Tuition Fees
+            RechargeSquareButton(
+                title = "Tuition\nFees",
+                onClick = { }
+            ) {
+                Box(modifier = Modifier.size(36.dp)) {
+                    Icon(
+                        imageVector = Icons.Filled.MenuBook,
+                        contentDescription = null,
+                        tint = Color(0xFFEEEEEE),
+                        modifier = Modifier.size(28.dp).align(Alignment.Center)
+                    )
+                    // Tag "2.3% fe..."
+                    Box(
+                        modifier = Modifier
+                            .offset(x = (-4).dp, y = (-4).dp)
+                            .clip(RoundedCornerShape(3.dp))
+                            .background(Color(0xFFC2185B))
+                            .padding(horizontal = 3.dp, vertical = 1.dp)
+                            .align(Alignment.TopStart)
+                    ) {
+                        Text("2.3%fe...", color = Color.White, fontSize = 6.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+
+            // 3. Electricity Bill
+            RechargeSquareButton(
+                title = "Electricity\nBill",
+                onClick = { navController.navigate(Screen.ElectricityBill.route) }
+            ) {
+                Box(modifier = Modifier.size(36.dp), contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = Icons.Filled.Lightbulb,
+                        contentDescription = null,
+                        tint = Color(0xFFFFB300),
+                        modifier = Modifier.size(28.dp)
+                    )
+                }
+            }
+
+            // 4. Loan Repayment
+            RechargeSquareButton(
+                title = "Loan\nRepayment",
+                onClick = { }
+            ) {
+                Box(modifier = Modifier.size(36.dp)) {
+                    Icon(
+                        imageVector = Icons.Filled.LocalMall,
+                        contentDescription = null,
+                        tint = Color(0xFF8D6E63),
+                        modifier = Modifier.size(26.dp).align(Alignment.Center)
+                    )
+                    // Small Calendar card overlay
+                    Box(
+                        modifier = Modifier
+                            .size(14.dp)
+                            .clip(RoundedCornerShape(1.dp))
+                            .background(Color.White)
+                            .border(0.5.dp, Color.Gray, RoundedCornerShape(1.dp))
+                            .align(Alignment.BottomEnd),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("31", color = Color(0xFF1976D2), fontSize = 7.sp, fontWeight = FontWeight.Black)
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // SIM card card & More button row
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
+            // Free Delivery of Jio SIM Card
+            Row(
                 modifier = Modifier
-                    .size(50.dp)
-                    .clip(CircleShape)
-                    .background(Color(0xFFFF9800)),
-                contentAlignment = Alignment.Center
+                    .weight(1f)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(Color(0xFF151517))
+                    .padding(horizontal = 14.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Icon(Icons.Filled.LocalOffer, contentDescription = null, tint = White)
+                Text(
+                    "Free Delivery of Jio SIM",
+                    color = Color.White,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                // Red SIM Card Icon
+                Box(
+                    modifier = Modifier
+                        .size(width = 24.dp, height = 30.dp)
+                        .clip(RoundedCornerShape(2.dp))
+                        .background(Color(0xFFD50000)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+                        // Draw angled cut corner on top right
+                        val path = Path().apply {
+                            moveTo(size.width, 0f)
+                            lineTo(size.width - 6f, 0f)
+                            lineTo(size.width, 6f)
+                            close()
+                        }
+                        drawPath(path, Color(0xFF151517))
+                    }
+                    // Yellow contact lines
+                    Box(
+                        modifier = Modifier
+                            .size(10.dp, 12.dp)
+                            .border(1.dp, Color(0xFFFFD54F), RoundedCornerShape(1.dp))
+                    )
+                }
             }
-            Spacer(Modifier.width(12.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                Text("Refer & Earn ₹100", fontWeight = FontWeight.Bold, color = PurpleDark, fontSize = 14.sp)
-                Text("Invite friends to PhonePe", color = Color.Gray, fontSize = 12.sp)
+
+            // More Button
+            Row(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(Color(0xFF151517))
+                    .clickable { }
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    "More",
+                    color = Color(0xFF9575CD),
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Icon(
+                    imageVector = Icons.Filled.ArrowForward,
+                    contentDescription = null,
+                    tint = Color(0xFF9575CD),
+                    modifier = Modifier.size(14.dp)
+                )
             }
-            Icon(Icons.Filled.ChevronRight, contentDescription = null, tint = PurpleDark)
         }
     }
 }
 
-data class Quadruple<A, B, C, D>(val a: A, val b: B, val c: C, val d: D)
+@Composable
+fun RechargeSquareButton(
+    title: String,
+    onClick: () -> Unit,
+    icon: @Composable () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .width(80.dp)
+            .clickable(onClick = onClick),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(76.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(Color(0xFF151517)),
+            contentAlignment = Alignment.Center
+        ) {
+            icon()
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = title,
+            color = Color.White,
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Medium,
+            textAlign = TextAlign.Center,
+            lineHeight = 14.sp
+        )
+    }
+}
