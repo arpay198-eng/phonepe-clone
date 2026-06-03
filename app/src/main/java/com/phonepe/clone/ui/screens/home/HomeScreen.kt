@@ -323,6 +323,173 @@ fun RisingArrow3D(color: Color, height: Int) {
 }
 
 @Composable
+fun MobileTransferIcon() {
+    Box(
+        modifier = Modifier.size(28.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val w = size.width
+            val h = size.height
+            
+            // Outer phone body (white)
+            drawRoundRect(
+                color = Color.White,
+                topLeft = androidx.compose.ui.geometry.Offset(w * 0.15f, h * 0.05f),
+                size = androidx.compose.ui.geometry.Size(w * 0.7f, h * 0.9f),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(4.dp.toPx(), 4.dp.toPx())
+            )
+            
+            // Inner screen (light purple)
+            drawRoundRect(
+                color = Color(0xFFD1C4E9),
+                topLeft = androidx.compose.ui.geometry.Offset(w * 0.22f, h * 0.12f),
+                size = androidx.compose.ui.geometry.Size(w * 0.56f, h * 0.72f),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(2.dp.toPx(), 2.dp.toPx())
+            )
+            
+            // Speaker
+            drawRect(
+                color = Color.DarkGray,
+                topLeft = androidx.compose.ui.geometry.Offset(w * 0.4f, h * 0.08f),
+                size = androidx.compose.ui.geometry.Size(w * 0.2f, 1.dp.toPx())
+            )
+        }
+        
+        Icon(
+            imageVector = Icons.Filled.Call,
+            contentDescription = null,
+            tint = Color(0xFF5F259F),
+            modifier = Modifier.size(13.dp)
+        )
+    }
+}
+
+@Composable
+fun BankTransferIcon() {
+    Canvas(modifier = Modifier.size(28.dp)) {
+        val w = size.width
+        val h = size.height
+        
+        // Roof triangle
+        val roofPath = Path().apply {
+            moveTo(w * 0.1f, h * 0.35f)
+            lineTo(w * 0.5f, h * 0.1f)
+            lineTo(w * 0.9f, h * 0.35f)
+            close()
+        }
+        drawPath(roofPath, Color.White)
+        
+        // Horizontal bar under roof
+        drawRect(
+            color = Color.White,
+            topLeft = androidx.compose.ui.geometry.Offset(w * 0.15f, h * 0.35f),
+            size = androidx.compose.ui.geometry.Size(w * 0.7f, h * 0.08f)
+        )
+        
+        // Pillars
+        val pillarWidth = w * 0.1f
+        val pillarHeight = h * 0.35f
+        val pillarY = h * 0.43f
+        
+        drawRect(color = Color.White, topLeft = androidx.compose.ui.geometry.Offset(w * 0.22f, pillarY), size = androidx.compose.ui.geometry.Size(pillarWidth, pillarHeight))
+        drawRect(color = Color.White, topLeft = androidx.compose.ui.geometry.Offset(w * 0.45f, pillarY), size = androidx.compose.ui.geometry.Size(pillarWidth, pillarHeight))
+        drawRect(color = Color.White, topLeft = androidx.compose.ui.geometry.Offset(w * 0.68f, pillarY), size = androidx.compose.ui.geometry.Size(pillarWidth, pillarHeight))
+        
+        // Base foundation
+        drawRect(
+            color = Color.White,
+            topLeft = androidx.compose.ui.geometry.Offset(w * 0.1f, h * 0.78f),
+            size = androidx.compose.ui.geometry.Size(w * 0.8f, h * 0.12f)
+        )
+    }
+}
+
+@Composable
+fun WalletIcon() {
+    Box(
+        modifier = Modifier.size(28.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val w = size.width
+            val h = size.height
+            
+            // Wallet body
+            drawRoundRect(
+                color = Color.White,
+                topLeft = androidx.compose.ui.geometry.Offset(w * 0.1f, h * 0.35f),
+                size = androidx.compose.ui.geometry.Size(w * 0.8f, h * 0.55f),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(3.dp.toPx(), 3.dp.toPx())
+            )
+            
+            // Flap
+            drawRoundRect(
+                color = Color(0xFFD1C4E9),
+                topLeft = androidx.compose.ui.geometry.Offset(w * 0.55f, h * 0.5f),
+                size = androidx.compose.ui.geometry.Size(w * 0.35f, h * 0.25f),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(2.dp.toPx(), 2.dp.toPx())
+            )
+            
+            // Button dot
+            drawCircle(
+                color = Color.White,
+                radius = 1.5.dp.toPx(),
+                center = androidx.compose.ui.geometry.Offset(w * 0.65f, h * 0.625f)
+            )
+            
+            // Card slipping out
+            drawRoundRect(
+                color = Color(0xFFE0E0E0),
+                topLeft = androidx.compose.ui.geometry.Offset(w * 0.3f, h * 0.1f),
+                size = androidx.compose.ui.geometry.Size(w * 0.4f, h * 0.35f),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(2.dp.toPx(), 2.dp.toPx())
+            )
+        }
+        
+        Box(
+            modifier = Modifier
+                .offset(y = (-5).dp)
+                .size(12.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "₹",
+                color = Color(0xFF5F259F),
+                fontSize = 8.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
+
+@Composable
+fun CheckBalanceIcon() {
+    Box(
+        modifier = Modifier.size(28.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val w = size.width
+            val h = size.height
+            // White card background
+            drawRoundRect(
+                color = Color.White,
+                topLeft = androidx.compose.ui.geometry.Offset(w * 0.2f, h * 0.1f),
+                size = androidx.compose.ui.geometry.Size(w * 0.6f, h * 0.8f),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(3.dp.toPx(), 3.dp.toPx())
+            )
+        }
+        Text(
+            text = "₹",
+            color = Color(0xFF5F259F),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Black
+        )
+    }
+}
+
+@Composable
 fun MoneyTransfersSection(
     navController: NavController,
     onCheckBalanceClick: () -> Unit,
@@ -384,45 +551,50 @@ fun MoneyTransfersSection(
             // 1. To Mobile Number
             MoneyTransferAction(
                 title = "To Mobile\nNumber",
-                icon = Icons.Filled.SendToMobile,
                 hasGreenDot = true,
                 onClick = { navController.navigate(Screen.PayToPhone.route) }
-            )
+            ) {
+                MobileTransferIcon()
+            }
 
             // 2. To Bank & Self
             MoneyTransferAction(
                 title = "To Bank &\nSelf A/c",
-                icon = Icons.Filled.AccountBalance,
                 onClick = { navController.navigate(Screen.BankTransfer.route) }
-            )
+            ) {
+                BankTransferIcon()
+            }
 
             // 3. PhonePe Wallet
             MoneyTransferAction(
                 title = "PhonePe\nWallet",
-                icon = Icons.Filled.Wallet,
                 onClick = { }
-            )
+            ) {
+                WalletIcon()
+            }
 
             // 4. Check Balance
-            CheckBalanceAction(
-                showBalance = showBalance,
-                balanceAmount = balanceAmount,
+            val balanceText = if (showBalance) "₹$balanceAmount" else "Check\nBalance"
+            MoneyTransferAction(
+                title = balanceText,
                 onClick = onCheckBalanceClick
-            )
+            ) {
+                CheckBalanceIcon()
+            }
         }
     }
 }
 
 @Composable
-fun MoneyTransferAction(
+fun RowScope.MoneyTransferAction(
     title: String,
-    icon: ImageVector,
     hasGreenDot: Boolean = false,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    iconContent: @Composable () -> Unit
 ) {
     Column(
         modifier = Modifier
-            .width(72.dp)
+            .weight(1f)
             .clickable(onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -430,16 +602,10 @@ fun MoneyTransferAction(
             modifier = Modifier
                 .size(56.dp)
                 .clip(CircleShape)
-                .background(Color(0xFF5F259F))
-                .padding(14.dp),
+                .background(Color(0xFF5F259F)),
             contentAlignment = Alignment.Center
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = title,
-                tint = Color.White,
-                modifier = Modifier.size(28.dp)
-            )
+            iconContent()
             if (hasGreenDot) {
                 Box(
                     modifier = Modifier
@@ -453,52 +619,6 @@ fun MoneyTransferAction(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = title,
-            color = Color.White,
-            fontSize = 11.sp,
-            fontWeight = FontWeight.Medium,
-            textAlign = TextAlign.Center,
-            lineHeight = 14.sp
-        )
-    }
-}
-
-@Composable
-fun CheckBalanceAction(
-    showBalance: Boolean,
-    balanceAmount: String,
-    onClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .width(72.dp)
-            .clickable(onClick = onClick),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
-            modifier = Modifier
-                .size(56.dp)
-                .clip(CircleShape)
-                .background(Color(0xFF5F259F)),
-            contentAlignment = Alignment.Center
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(44.dp)
-                    .clip(CircleShape)
-                    .background(Color(0xFF7B3FCB)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = if (showBalance) "₹" else "₹",
-                    color = Color.White,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Black
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = if (showBalance) "₹$balanceAmount" else "Check\nBalance",
             color = Color.White,
             fontSize = 11.sp,
             fontWeight = FontWeight.Medium,
@@ -593,6 +713,219 @@ fun DailyInvestmentsSection(navController: NavController) {
 }
 
 @Composable
+fun MobileRechargeDrawing() {
+    Box(
+        modifier = Modifier.size(36.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val w = size.width
+            val h = size.height
+            // Phone body
+            drawRoundRect(
+                color = Color(0xFF1976D2),
+                topLeft = androidx.compose.ui.geometry.Offset(w * 0.25f, h * 0.1f),
+                size = androidx.compose.ui.geometry.Size(w * 0.5f, h * 0.8f),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(4.dp.toPx(), 4.dp.toPx())
+            )
+            // Screen
+            drawRoundRect(
+                color = Color(0xFF0D47A1),
+                topLeft = androidx.compose.ui.geometry.Offset(w * 0.29f, h * 0.16f),
+                size = androidx.compose.ui.geometry.Size(w * 0.42f, h * 0.68f),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(2.dp.toPx(), 2.dp.toPx())
+            )
+        }
+        Icon(
+            imageVector = Icons.Filled.FlashOn,
+            contentDescription = null,
+            tint = Color(0xFFFFC107),
+            modifier = Modifier.size(18.dp)
+        )
+    }
+}
+
+@Composable
+fun TuitionFeesDrawing() {
+    Box(
+        modifier = Modifier.size(40.dp)
+    ) {
+        Canvas(modifier = Modifier.size(32.dp).align(Alignment.BottomCenter)) {
+            val w = size.width
+            val h = size.height
+            
+            // Left page
+            val leftPage = Path().apply {
+                moveTo(w * 0.1f, h * 0.2f)
+                quadraticBezierTo(w * 0.3f, h * 0.15f, w * 0.5f, h * 0.2f)
+                lineTo(w * 0.5f, h * 0.85f)
+                quadraticBezierTo(w * 0.3f, h * 0.8f, w * 0.1f, h * 0.85f)
+                close()
+            }
+            drawPath(leftPage, Color.White)
+            
+            // Right page
+            val rightPage = Path().apply {
+                moveTo(w * 0.5f, h * 0.2f)
+                quadraticBezierTo(w * 0.7f, h * 0.15f, w * 0.9f, h * 0.2f)
+                lineTo(w * 0.9f, h * 0.85f)
+                quadraticBezierTo(w * 0.7f, h * 0.8f, w * 0.5f, h * 0.85f)
+                close()
+            }
+            drawPath(rightPage, Color(0xFFF5F5F5))
+            
+            // Spine
+            drawLine(
+                color = Color.LightGray,
+                start = androidx.compose.ui.geometry.Offset(w * 0.5f, h * 0.2f),
+                end = androidx.compose.ui.geometry.Offset(w * 0.5f, h * 0.85f),
+                width = 1.dp.toPx()
+            )
+            
+            // Pen
+            drawLine(
+                color = Color(0xFFD32F2F),
+                start = androidx.compose.ui.geometry.Offset(w * 0.7f, h * 0.3f),
+                end = androidx.compose.ui.geometry.Offset(w * 0.85f, h * 0.7f),
+                width = 2.dp.toPx()
+            )
+        }
+        
+        Row(
+            modifier = Modifier
+                .offset(x = 0.dp, y = (-2).dp)
+                .clip(RoundedCornerShape(3.dp))
+                .background(Color(0xFFC2185B))
+                .padding(horizontal = 4.dp, vertical = 2.dp)
+                .align(Alignment.TopStart),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(8.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xFF00E676)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("%", color = Color.White, fontSize = 5.sp, fontWeight = FontWeight.Bold)
+            }
+            Text(
+                "2.3%fe...",
+                color = Color.White,
+                fontSize = 7.sp,
+                fontWeight = FontWeight.Black
+            )
+        }
+    }
+}
+
+@Composable
+fun ElectricityBillDrawing() {
+    Canvas(modifier = Modifier.size(36.dp)) {
+        val w = size.width
+        val h = size.height
+        
+        val domeCenter = androidx.compose.ui.geometry.Offset(w * 0.5f, h * 0.4f)
+        val domeRadius = w * 0.25f
+        
+        drawCircle(
+            brush = Brush.radialGradient(
+                colors = listOf(Color(0xFFFFEE58), Color(0xFFF57F17)),
+                center = domeCenter,
+                radius = domeRadius
+            ),
+            center = domeCenter,
+            radius = domeRadius
+        )
+        
+        val neckPath = Path().apply {
+            moveTo(w * 0.38f, h * 0.58f)
+            lineTo(w * 0.62f, h * 0.58f)
+            lineTo(w * 0.58f, h * 0.75f)
+            lineTo(w * 0.42f, h * 0.75f)
+            close()
+        }
+        drawPath(neckPath, Color.Gray)
+        
+        drawLine(Color.DarkGray, androidx.compose.ui.geometry.Offset(w * 0.38f, h * 0.63f), androidx.compose.ui.geometry.Offset(w * 0.62f, h * 0.63f), 1.5.dp.toPx())
+        drawLine(Color.DarkGray, androidx.compose.ui.geometry.Offset(w * 0.4f, h * 0.69f), androidx.compose.ui.geometry.Offset(w * 0.6f, h * 0.69f), 1.5.dp.toPx())
+        
+        drawCircle(Color.Black, 2.dp.toPx(), androidx.compose.ui.geometry.Offset(w * 0.5f, h * 0.76f))
+        
+        val filamentPath = Path().apply {
+            moveTo(w * 0.45f, h * 0.52f)
+            lineTo(w * 0.45f, h * 0.4f)
+            lineTo(w * 0.5f, h * 0.32f)
+            lineTo(w * 0.55f, h * 0.4f)
+            lineTo(w * 0.55f, h * 0.52f)
+        }
+        drawPath(filamentPath, Color.White, style = androidx.compose.ui.graphics.drawscope.Stroke(width = 1.dp.toPx()))
+    }
+}
+
+@Composable
+fun LoanRepaymentDrawing() {
+    Box(
+        modifier = Modifier.size(36.dp)
+    ) {
+        Canvas(modifier = Modifier.size(28.dp).align(Alignment.TopStart)) {
+            val w = size.width
+            val h = size.height
+            
+            drawCircle(
+                color = Color(0xFFD84315),
+                radius = w * 0.38f,
+                center = androidx.compose.ui.geometry.Offset(w * 0.5f, h * 0.6f)
+            )
+            val neckPath = Path().apply {
+                moveTo(w * 0.35f, h * 0.3f)
+                lineTo(w * 0.65f, h * 0.3f)
+                lineTo(w * 0.75f, h * 0.15f)
+                lineTo(w * 0.25f, h * 0.15f)
+                close()
+            }
+            drawPath(neckPath, Color(0xFFD84315))
+            
+            drawLine(
+                color = Color(0xFFFFB300),
+                start = androidx.compose.ui.geometry.Offset(w * 0.33f, h * 0.32f),
+                end = androidx.compose.ui.geometry.Offset(w * 0.67f, h * 0.32f),
+                width = 2.dp.toPx()
+            )
+        }
+        
+        Column(
+            modifier = Modifier
+                .size(16.dp, 16.dp)
+                .align(Alignment.BottomEnd)
+                .clip(RoundedCornerShape(2.dp))
+                .background(Color.White)
+                .border(0.5.dp, Color.LightGray, RoundedCornerShape(2.dp)),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(4.dp)
+                    .background(Color(0xFF1976D2))
+            )
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "31",
+                    color = Color(0xFF1976D2),
+                    fontSize = 8.sp,
+                    fontWeight = FontWeight.Black
+                )
+            }
+        }
+    }
+}
+
+@Composable
 fun RechargeAndBillsSection(navController: NavController) {
     Column(
         modifier = Modifier
@@ -619,20 +952,7 @@ fun RechargeAndBillsSection(navController: NavController) {
                 title = "Mobile\nRecharge",
                 onClick = { navController.navigate(Screen.MobileRecharge.route) }
             ) {
-                Box(modifier = Modifier.size(36.dp), contentAlignment = Alignment.Center) {
-                    Box(
-                        modifier = Modifier
-                            .size(width = 16.dp, height = 28.dp)
-                            .clip(RoundedCornerShape(3.dp))
-                            .background(Color(0xFF1E88E5))
-                    )
-                    Icon(
-                        imageVector = Icons.Filled.FlashOn,
-                        contentDescription = null,
-                        tint = Color(0xFFFFB300),
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
+                MobileRechargeDrawing()
             }
 
             // 2. Tuition Fees
@@ -640,25 +960,7 @@ fun RechargeAndBillsSection(navController: NavController) {
                 title = "Tuition\nFees",
                 onClick = { }
             ) {
-                Box(modifier = Modifier.size(36.dp)) {
-                    Icon(
-                        imageVector = Icons.Filled.MenuBook,
-                        contentDescription = null,
-                        tint = Color(0xFFEEEEEE),
-                        modifier = Modifier.size(28.dp).align(Alignment.Center)
-                    )
-                    // Tag "2.3% fe..."
-                    Box(
-                        modifier = Modifier
-                            .offset(x = (-4).dp, y = (-4).dp)
-                            .clip(RoundedCornerShape(3.dp))
-                            .background(Color(0xFFC2185B))
-                            .padding(horizontal = 3.dp, vertical = 1.dp)
-                            .align(Alignment.TopStart)
-                    ) {
-                        Text("2.3%fe...", color = Color.White, fontSize = 6.sp, fontWeight = FontWeight.Bold)
-                    }
-                }
+                TuitionFeesDrawing()
             }
 
             // 3. Electricity Bill
@@ -666,14 +968,7 @@ fun RechargeAndBillsSection(navController: NavController) {
                 title = "Electricity\nBill",
                 onClick = { navController.navigate(Screen.ElectricityBill.route) }
             ) {
-                Box(modifier = Modifier.size(36.dp), contentAlignment = Alignment.Center) {
-                    Icon(
-                        imageVector = Icons.Filled.Lightbulb,
-                        contentDescription = null,
-                        tint = Color(0xFFFFB300),
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
+                ElectricityBillDrawing()
             }
 
             // 4. Loan Repayment
@@ -681,26 +976,7 @@ fun RechargeAndBillsSection(navController: NavController) {
                 title = "Loan\nRepayment",
                 onClick = { }
             ) {
-                Box(modifier = Modifier.size(36.dp)) {
-                    Icon(
-                        imageVector = Icons.Filled.LocalMall,
-                        contentDescription = null,
-                        tint = Color(0xFF8D6E63),
-                        modifier = Modifier.size(26.dp).align(Alignment.Center)
-                    )
-                    // Small Calendar card overlay
-                    Box(
-                        modifier = Modifier
-                            .size(14.dp)
-                            .clip(RoundedCornerShape(1.dp))
-                            .background(Color.White)
-                            .border(0.5.dp, Color.Gray, RoundedCornerShape(1.dp))
-                            .align(Alignment.BottomEnd),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("31", color = Color(0xFF1976D2), fontSize = 7.sp, fontWeight = FontWeight.Black)
-                    }
-                }
+                LoanRepaymentDrawing()
             }
         }
 
@@ -783,14 +1059,14 @@ fun RechargeAndBillsSection(navController: NavController) {
 }
 
 @Composable
-fun RechargeSquareButton(
+fun RowScope.RechargeSquareButton(
     title: String,
     onClick: () -> Unit,
     icon: @Composable () -> Unit
 ) {
     Column(
         modifier = Modifier
-            .width(80.dp)
+            .weight(1f)
             .clickable(onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
