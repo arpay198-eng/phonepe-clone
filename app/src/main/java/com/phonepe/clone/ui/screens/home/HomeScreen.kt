@@ -31,7 +31,7 @@ import com.phonepe.clone.ui.components.CircularAvatar
 import com.phonepe.clone.ui.navigation.Screen
 import com.phonepe.clone.ui.theme.*
 import com.phonepe.clone.viewmodel.AppViewModel
-import io.coil.compose.AsyncImage
+import coil.compose.AsyncImage
 
 @Composable
 fun HomeScreen(navController: NavController) {
